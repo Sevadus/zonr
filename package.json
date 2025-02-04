@@ -7,10 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "build:worker": "opennextjs-cloudflare",
-    "dev:worker": "wrangler dev --port 8771",
-    "preview:worker": "pnpm run build:worker && pnpm run dev:worker",
-    "deploy:worker": "pnpm run build:worker && wrangler deploy"
+    "build:pages": "next-on-pages"
   },
   "dependencies": {
     "luxon": "^3.5.0",
@@ -20,8 +17,8 @@
     "react-dom": "^19.0.0"
   },
   "devDependencies": {
+    "@cloudflare/next-on-pages": "^1.13.7",
     "@eslint/eslintrc": "^3.2.0",
-    "@opennextjs/cloudflare": "^0.4.4",
     "@types/node": "^20.17.17",
     "@types/react": "^19.0.8",
     "@types/react-dom": "^19.0.3",
