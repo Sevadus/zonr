@@ -1,5 +1,6 @@
-import { GithubIcon } from 'lucide-react';
 import { z } from 'zod';
+
+import { DiGithubBadge } from 'react-icons/di';
 
 import DtConfigCard from '@/components/features/dtConfigCard';
 import DtConvertCard from '@/components/features/dtConvertCard';
@@ -38,7 +39,7 @@ export default async function Home({
             </a>
           </p>
           <p>
-            <GithubIcon className="inline-block w-4 h-4" />
+            <DiGithubBadge className="inline-block size-4 align-middle" />
             &nbsp;
             <a href="https://github.com/sevadus/zonr" className="underline">
               Source Code

@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import { ThemeProvider } from 'next-themes';
 
+import { Toaster } from '@/components/ui/toaster';
+
 import './globals.css';
 
 export const runtime = 'edge';
@@ -19,7 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head />
-      <body>
+      <body suppressHydrationWarning>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -27,6 +29,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           {children}
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>

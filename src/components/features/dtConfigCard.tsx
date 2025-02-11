@@ -1,9 +1,9 @@
 'use client';
 
-import confetti from 'canvas-confetti';
+import { toast } from '@/hooks/use-toast';
 import { formatInTimeZone } from 'date-fns-tz';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -33,6 +33,11 @@ const commonTimezones = [
 export default function DtConfigCard() {
   const [selectedDate, setSelectedDate] = useState<Date>();
   const [shareableUrl, setShareableUrl] = useState('');
+  const [mounted, setMounted] = useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleDateChange = (isoString: string) => {
     // Parse the ISO string while preserving the timezone
@@ -65,63 +70,34 @@ export default function DtConfigCard() {
 
         <div className="space-y-2 py-6">
           <h3 className="text-sm font-medium leading-none">Shareable Link</h3>
-          <div className="flex gap-2">
-            <Input
-              readOnly
-              value={shareableUrl || ''}
-              className="font-mono text-sm"
-            />
-            <Button
-              variant="secondary"
-              onClick={() => {
-                navigator.clipboard.writeText(shareableUrl || '');
-                // Create a massive explosion effect
-                const count = 200;
-                const defaults = {
-                  origin: { y: 0.7 },
-                  spread: 360,
-                  startVelocity: 30,
-                  gravity: 0.5,
-                  ticks: 60,
-                } satisfies confetti.Options;
-
-                function fire(
-                  particleRatio: number,
-                  opts: Partial<confetti.Options>,
-                ) {
-                  confetti({
-                    ...defaults,
-                    ...opts,
-                    particleCount: Math.floor(count * particleRatio),
-                  });
-                }
-
-                fire(0.25, {
-                  spread: 26,
-                  startVelocity: 55,
-                });
-                fire(0.2, {
-                  spread: 60,
-                });
-                fire(0.35, {
-                  spread: 100,
-                  decay: 0.91,
-                  scalar: 0.8,
-                });
-                fire(0.1, {
-                  spread: 120,
-                  startVelocity: 25,
-                  decay: 0.92,
-                  scalar: 1.2,
-                });
-                fire(0.1, {
-                  spread: 120,
-                  startVelocity: 45,
-                });
-              }}
-            >
-              Copy
-            </Button>
+          <div className="flex gap-2 h-10">
+            {mounted ? (
+              <>
+                <Input
+                  readOnly
+                  value={shareableUrl || ''}
+                  className="font-mono text-sm"
+                />
+                <Button
+                  variant="secondary"
+                  onClick={() => {
+                    navigator.clipboard.writeText(shareableUrl || '');
+                    toast({
+                      title: 'Copied to clipboard',
+                    });
+                  }}
+                >
+                  Copy
+                </Button>
+              </>
+            ) : (
+              <>
+                <div className="h-10 w-full bg-muted animate-pulse rounded-md" />
+                <Button variant="secondary" disabled>
+                  Copy
+                </Button>
+              </>
+            )}
           </div>
         </div>
 
@@ -130,8 +106,8 @@ export default function DtConfigCard() {
           <div className="grid gap-2 md:grid-cols-2">
             {/* eslint-disable @next/next/no-img-element */}
             {commonTimezones.map((tz) => (
-              <div key={tz.zone} className="text-sm">
-                {selectedDate ? (
+              <div key={tz.zone} className="text-sm h-5">
+                {mounted && selectedDate ? (
                   <>
                     {tz.flag && (
                       <img
@@ -145,7 +121,7 @@ export default function DtConfigCard() {
                     {tz.label}
                   </>
                 ) : (
-                  <>{tz.label}</>
+                  <div className="h-5 w-full bg-muted animate-pulse rounded-md" />
                 )}
               </div>
             ))}
