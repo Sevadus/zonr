@@ -1,7 +1,9 @@
+import { GithubIcon } from 'lucide-react';
+import { z } from 'zod';
+
 import DtConfigCard from '@/components/features/dtConfigCard';
 import DtConvertCard from '@/components/features/dtConvertCard';
 import { ThemeToggle } from '@/components/theme-toggle';
-import { z } from 'zod';
 
 function isValidDateTime(dt: string) {
   try {
@@ -31,8 +33,15 @@ export default async function Home({
           <p>Stay in sync with a single link.</p>
           <p>
             Made with ❤️ by{' '}
-            <a href="https://zonr.dev" className="underline">
-              zonr.dev
+            <a href="https://twitch.tv/sevadus" className="underline">
+              Sevadus
+            </a>
+          </p>
+          <p>
+            <GithubIcon className="inline-block w-4 h-4" />
+            &nbsp;
+            <a href="https://github.com/sevadus/zonr" className="underline">
+              Source Code
             </a>
           </p>
         </div>

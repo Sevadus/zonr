@@ -1,5 +1,6 @@
 'use client';
 
+import confetti from 'canvas-confetti';
 import { formatInTimeZone } from 'date-fns-tz';
 
 import { useState } from 'react';
@@ -17,16 +18,16 @@ import { Input } from '@/components/ui/input';
 
 // Top 10 most common timezones with their display info
 const commonTimezones = [
-  { zone: 'America/New_York', label: '🇺🇸 New York (EST)', flag: '🇺🇸' },
-  { zone: 'America/Los_Angeles', label: '🇺🇸 Los Angeles (PST)', flag: '🇺🇸' },
-  { zone: 'Europe/London', label: '🇬🇧 London (GMT)', flag: '🇬🇧' },
-  { zone: 'Europe/Paris', label: '🇪🇺 Paris (CET)', flag: '🇫🇷' },
-  { zone: 'Asia/Tokyo', label: '🇯🇵 Tokyo (JST)', flag: '🇯🇵' },
-  { zone: 'Asia/Shanghai', label: '🇨🇳 Shanghai (CST)', flag: '🇨🇳' },
-  { zone: 'Asia/Dubai', label: '🇦🇪 Dubai (GST)', flag: '🇦🇪' },
-  { zone: 'Australia/Sydney', label: '🇦🇺 Sydney (AEST)', flag: '🇦🇺' },
-  { zone: 'Asia/Singapore', label: '🇸🇬 Singapore (SGT)', flag: '🇸🇬' },
-  { zone: 'Europe/Berlin', label: '🇩🇪 Berlin (CET)', flag: '🇩🇪' },
+  { zone: 'America/New_York', label: 'New York (EST)', flag: 'us' },
+  { zone: 'America/Los_Angeles', label: 'Los Angeles (PST)', flag: 'us' },
+  { zone: 'Europe/London', label: 'London (GMT)', flag: 'gb' },
+  { zone: 'Europe/Paris', label: 'Paris (CET)', flag: 'fr' },
+  { zone: 'Asia/Tokyo', label: 'Tokyo (JST)', flag: 'jp' },
+  { zone: 'Asia/Shanghai', label: 'Shanghai (CST)', flag: 'cn' },
+  { zone: 'Asia/Dubai', label: 'Dubai (GST)', flag: 'ae' },
+  { zone: 'Australia/Sydney', label: 'Sydney (AEST)', flag: 'au' },
+  { zone: 'Asia/Singapore', label: 'Singapore (SGT)', flag: 'sg' },
+  { zone: 'Europe/Berlin', label: 'Berlin (CET)', flag: 'de' },
 ];
 
 export default function DtConfigCard() {
@@ -35,7 +36,8 @@ export default function DtConfigCard() {
 
   const handleDateChange = (isoString: string) => {
     // Parse the ISO string while preserving the timezone
-    const isoStringDT = isoString.split('|')[0];
+    //const isoStringDT = isoString.split('|')[0];
+    const isoStringDT = isoString.replace('|', '');
     const date = new Date(isoStringDT);
     setSelectedDate(date);
 
@@ -73,6 +75,49 @@ export default function DtConfigCard() {
               variant="secondary"
               onClick={() => {
                 navigator.clipboard.writeText(shareableUrl || '');
+                // Create a massive explosion effect
+                const count = 200;
+                const defaults = {
+                  origin: { y: 0.7 },
+                  spread: 360,
+                  startVelocity: 30,
+                  gravity: 0.5,
+                  ticks: 60,
+                } satisfies confetti.Options;
+
+                function fire(
+                  particleRatio: number,
+                  opts: Partial<confetti.Options>,
+                ) {
+                  confetti({
+                    ...defaults,
+                    ...opts,
+                    particleCount: Math.floor(count * particleRatio),
+                  });
+                }
+
+                fire(0.25, {
+                  spread: 26,
+                  startVelocity: 55,
+                });
+                fire(0.2, {
+                  spread: 60,
+                });
+                fire(0.35, {
+                  spread: 100,
+                  decay: 0.91,
+                  scalar: 0.8,
+                });
+                fire(0.1, {
+                  spread: 120,
+                  startVelocity: 25,
+                  decay: 0.92,
+                  scalar: 1.2,
+                });
+                fire(0.1, {
+                  spread: 120,
+                  startVelocity: 45,
+                });
               }}
             >
               Copy
@@ -83,18 +128,28 @@ export default function DtConfigCard() {
         <div className="rounded-lg border bg-muted/50 p-4 space-y-2">
           <h3 className="text-sm font-medium">Common Time Zones</h3>
           <div className="grid gap-2 md:grid-cols-2">
+            {/* eslint-disable @next/next/no-img-element */}
             {commonTimezones.map((tz) => (
               <div key={tz.zone} className="text-sm">
                 {selectedDate ? (
                   <>
-                    {tz.flag}{' '}
+                    {tz.flag && (
+                      <img
+                        src={`https://flagcdn.com/24x18/${tz.flag}.png`}
+                        alt={tz.label}
+                        className="mr-1 inline-block h-4"
+                      />
+                    )}
                     {formatInTimeZone(selectedDate, tz.zone, 'MMM d, h:mm a')}
+                    {' in '}
+                    {tz.label}
                   </>
                 ) : (
                   <>{tz.label}</>
                 )}
               </div>
             ))}
+            {/* eslint-enable @next/next/no-img-element */}
           </div>
         </div>
       </CardContent>
