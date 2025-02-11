@@ -1,10 +1,10 @@
 'use client';
 
-import { CalendarIcon } from '@radix-ui/react-icons';
 import { getTimeZones } from '@vvo/tzdb';
 import { DateTime } from 'luxon';
 
 import * as React from 'react';
+import { LuCalendarDays } from 'react-icons/lu';
 
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
@@ -97,25 +97,11 @@ export interface DateTimePickerProps {
 export function DateTimePicker({ setDate }: DateTimePickerProps) {
   const [isOpen, setIsOpen] = React.useState(false);
   const [mounted, setMounted] = React.useState(false);
+  const hasInitialized = React.useRef(false);
 
   const [timeState, setTimeState] = React.useState<TimeState>(() => {
-    // Return a default state during SSR
-    return {
-      year: '2024',
-      month: '01',
-      day: '01',
-      hour: '12',
-      minute: '00',
-      second: '00',
-      ampm: 'AM',
-      timezone: 'UTC',
-    };
-  });
-
-  // Update the time state after mounting
-  React.useEffect(() => {
     const now = new Date();
-    setTimeState({
+    return {
       year: now.getFullYear().toString(),
       month: (now.getMonth() + 1).toString().padStart(2, '0'),
       day: now.getDate().toString().padStart(2, '0'),
@@ -124,9 +110,44 @@ export function DateTimePicker({ setDate }: DateTimePickerProps) {
       second: now.getSeconds().toString().padStart(2, '0'),
       ampm: now.getHours() >= 12 ? 'PM' : 'AM',
       timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-    });
-    setMounted(true);
-  }, []);
+    };
+  });
+
+  const emitDateChange = React.useCallback(
+    (newState: TimeState) => {
+      if (!setDate) return;
+
+      const hour24 =
+        newState.ampm === 'PM'
+          ? (parseInt(newState.hour) % 12) + 12
+          : parseInt(newState.hour) % 12;
+
+      const dt = DateTime.fromObject(
+        {
+          year: parseInt(newState.year),
+          month: parseInt(newState.month),
+          day: parseInt(newState.day),
+          hour: hour24,
+          minute: parseInt(newState.minute),
+          second: parseInt(newState.second),
+        },
+        { zone: newState.timezone },
+      );
+
+      const isoString = `${newState.year}-${newState.month}-${newState.day}T${hour24.toString().padStart(2, '0')}:${newState.minute}:${newState.second}|${dt.toFormat('ZZ')}`;
+      setDate(isoString);
+    },
+    [setDate],
+  );
+
+  // Update mounted state and emit initial date
+  React.useEffect(() => {
+    if (!hasInitialized.current) {
+      setMounted(true);
+      emitDateChange(timeState);
+      hasInitialized.current = true;
+    }
+  }, [emitDateChange, timeState]);
 
   const selectedHourRef = React.useRef<HTMLButtonElement>(null);
   const selectedMinuteRef = React.useRef<HTMLButtonElement>(null);
@@ -143,18 +164,6 @@ export function DateTimePicker({ setDate }: DateTimePickerProps) {
       }, 0);
     }
   }, [isOpen]);
-
-  const emitDateChange = (newState: TimeState) => {
-    if (!setDate) return;
-
-    const hour24 =
-      newState.ampm === 'PM'
-        ? (parseInt(newState.hour) % 12) + 12
-        : parseInt(newState.hour) % 12;
-
-    const isoString = `${newState.year}-${newState.month}-${newState.day}T${hour24.toString().padStart(2, '0')}:${newState.minute}:${newState.second}|${DateTime.now().setZone(newState.timezone).toFormat('ZZ')}`;
-    setDate(isoString);
-  };
 
   const handleCalendarSelect = (selectedDate: Date | undefined) => {
     if (!selectedDate) return;
@@ -191,7 +200,7 @@ export function DateTimePicker({ setDate }: DateTimePickerProps) {
         variant="outline"
         className="w-full justify-start text-left font-normal text-xl h-12"
       >
-        <CalendarIcon className="mr-2 h-8 w-8" />
+        <LuCalendarDays className="mr-2 !size-6" />
         <span>Loading...</span>
       </Button>
     );
@@ -206,7 +215,7 @@ export function DateTimePicker({ setDate }: DateTimePickerProps) {
             'w-full justify-start text-left font-normal text-xl h-12',
           )}
         >
-          <CalendarIcon className="mr-2 h-8 w-8" />
+          <LuCalendarDays className="mr-2 !size-6" />
           <span>{formatDisplayDate()}</span>
         </Button>
       </PopoverTrigger>
