@@ -7,15 +7,13 @@ import './globals.css';
 
 export const runtime = 'edge';
 
-interface Props {
-  params: { slug: string };
-  searchParams: { dt?: string };
-}
-
 export async function generateMetadata({
   searchParams,
-}: Props): Promise<Metadata> {
-  const dt = searchParams.dt;
+}: {
+  params: { [key: string]: string | string[] | undefined };
+  searchParams: { [key: string]: string | string[] | undefined };
+}): Promise<Metadata> {
+  const dt = searchParams.dt as string | undefined;
 
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://zonr.dev';
 
