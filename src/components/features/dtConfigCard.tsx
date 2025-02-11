@@ -1,7 +1,7 @@
 'use client';
 
-import { toast } from '@/hooks/use-toast';
 import { formatInTimeZone } from 'date-fns-tz';
+import { toast } from 'sonner';
 
 import React, { useState } from 'react';
 
@@ -82,9 +82,7 @@ export default function DtConfigCard() {
                   variant="secondary"
                   onClick={() => {
                     navigator.clipboard.writeText(shareableUrl || '');
-                    toast({
-                      title: 'Copied to clipboard',
-                    });
+                    toast.success('Copied to clipboard');
                   }}
                 >
                   Copy
