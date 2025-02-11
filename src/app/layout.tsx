@@ -10,10 +10,9 @@ export const runtime = 'edge';
 export async function generateMetadata({
   searchParams,
 }: {
-  params: { [key: string]: string | string[] | undefined };
-  searchParams: { [key: string]: string | string[] | undefined };
+  searchParams: Promise<{ dt: string | undefined }>;
 }): Promise<Metadata> {
-  const dt = searchParams.dt as string | undefined;
+  const { dt } = (await searchParams) ?? {};
 
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://zonr.dev';
 
