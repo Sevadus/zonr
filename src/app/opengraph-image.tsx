@@ -15,10 +15,13 @@ const commonTimezones = [
   { zone: 'Asia/Kolkata', label: 'New Delhi', flag: 'in' },
 ];
 
-export async function GET(request: Request) {
+export default async function GET({
+  params,
+}: {
+  params: Promise<{ dt: string | undefined }>;
+}) {
   try {
-    const { searchParams } = new URL(request.url);
-    const dt = searchParams.get('dt');
+    const { dt } = await params;
 
     if (!dt) {
       return new ImageResponse(
@@ -62,7 +65,7 @@ export async function GET(request: Request) {
       );
     }
 
-    const dtObj = DateTime.fromISO(dt);
+    const dtObj = DateTime.fromISO(decodeURIComponent(dt));
 
     return new ImageResponse(
       (
