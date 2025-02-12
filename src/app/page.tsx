@@ -1,3 +1,4 @@
+import { DateTime } from 'luxon';
 import { z } from 'zod';
 
 import { DiGithubBadge } from 'react-icons/di';
@@ -21,15 +22,18 @@ export async function generateMetadata({
     process.env.NEXT_PUBLIC_BASE_URL || 'https://zonr.dev',
   );
 
+  const description =
+    dt && isValidDateTime(dt)
+      ? `Time shared: ${DateTime.fromISO(decodeURIComponent(dt)).toLocaleString(DateTime.DATETIME_FULL)}`
+      : 'zonr is a platform for sharing your time with others in different timezones';
+
   const metadata: Metadata = {
-    title: 'zonr - Share your Time',
+    title: 'zonr - Stay in Sync with a Single Link',
     metadataBase: baseUrl,
-    description:
-      'zonr is a platform for sharing your time with others in different timezones',
+    description,
     openGraph: {
-      title: 'zonr - Share your Time',
-      description:
-        'zonr is a platform for sharing your time with others in different timezones',
+      title: 'zonr - Stay in Sync with a Single Link',
+      description,
       images: dt
         ? [`/opengraph-image?dt=${encodeURIComponent(dt)}`]
         : [`/opengraph-image`],
