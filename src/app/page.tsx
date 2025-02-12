@@ -24,8 +24,8 @@ export async function generateMetadata({
 
   const description =
     dt && isValidDateTime(dt)
-      ? `Time shared: ${DateTime.fromISO(dt).toLocaleString(DateTime.DATETIME_FULL)}. Click for instant conversion to your local timezone.`
-      : 'zonr is a platform for sharing your time with others in different timezones';
+      ? `Time shared: ${DateTime.fromISO(dt, { setZone: true }).toFormat('FFFF')}. Click for instant conversion to your local timezone.`
+      : 'The easiest way to share your time with others in different timezones.';
 
   const metadata: Metadata = {
     title: 'zonr - Stay in Sync with a Single Link',

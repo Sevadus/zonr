@@ -49,7 +49,7 @@ export default function DtConfigCard() {
     // Set the url parameter dt with the new isoString (urlencoded)
     const url = new URL(window.location.href);
     url.searchParams.set('dt', encodeURIComponent(isoString.replace('|', '')));
-    window.history.replaceState({}, '', url.toString());
+    //window.history.replaceState({}, '', url.toString());
     // Update the shareable URL
     setShareableUrl(url.toString());
   };
