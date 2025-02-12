@@ -1,5 +1,7 @@
 import { ThemeToggle } from '@/components/theme-toggle';
 
+export const runtime = 'edge';
+
 export default async function NotFound() {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center p-4 bg-background">
