@@ -16,7 +16,7 @@ export async function generateMetadata({
 }: {
   searchParams: Promise<{ dt: string | undefined }>;
 }): Promise<Metadata> {
-  const { dt } = await searchParams;
+  const dt = decodeURIComponent((await searchParams).dt as string);
 
   const baseUrl = new URL(
     process.env.NEXT_PUBLIC_BASE_URL || 'https://zonr.dev',
@@ -24,7 +24,7 @@ export async function generateMetadata({
 
   const description =
     dt && isValidDateTime(dt)
-      ? `Time shared: ${DateTime.fromISO(decodeURIComponent(dt)).toLocaleString(DateTime.DATETIME_FULL)}`
+      ? `Time shared: ${DateTime.fromISO(dt).toLocaleString(DateTime.DATETIME_FULL)}. Click for instant conversion to your local timezone.`
       : 'zonr is a platform for sharing your time with others in different timezones';
 
   const metadata: Metadata = {
@@ -65,6 +65,8 @@ export default async function Home({
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
   const dt = decodeURIComponent((await searchParams).dt as string);
+  console.log(dt);
+  console.log(isValidDateTime(dt));
   return (
     <div className="flex min-h-screen flex-col items-center justify-center p-4 bg-background">
       <div className="fixed top-4 right-4">
