@@ -1,20 +1,12 @@
-'use client';
+'use client'
 
-import { formatInTimeZone } from 'date-fns-tz';
-import { toast } from 'sonner';
-
-import React, { useState } from 'react';
-
-import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import { DateTimePicker } from '@/components/ui/date-time-picker';
-import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { DateTimePicker } from '@/components/ui/date-time-picker'
+import { Input } from '@/components/ui/input'
+import { formatInTimeZone } from 'date-fns-tz'
+import React, { useState } from 'react'
+import { toast } from 'sonner'
 
 // Top 10 most common timezones with their display info
 const commonTimezones = [
@@ -28,41 +20,41 @@ const commonTimezones = [
   { zone: 'Australia/Sydney', label: 'Sydney (AEST)', flag: 'au' },
   { zone: 'Asia/Singapore', label: 'Singapore (SGT)', flag: 'sg' },
   { zone: 'Europe/Berlin', label: 'Berlin (CET)', flag: 'de' },
-];
+]
 
 export default function DtConfigCard() {
-  const [selectedDate, setSelectedDate] = useState<Date>();
-  const [shareableUrl, setShareableUrl] = useState('');
-  const [mounted, setMounted] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<Date>()
+  const [shareableUrl, setShareableUrl] = useState('')
+  const [mounted, setMounted] = useState(false)
 
   React.useEffect(() => {
-    setMounted(true);
-  }, []);
+    setMounted(true)
+  }, [])
 
   const handleDateChange = (isoString: string) => {
     // Parse the ISO string while preserving the timezone
     //const isoStringDT = isoString.split('|')[0];
-    const isoStringDT = isoString.replace('|', '');
-    const date = new Date(isoStringDT);
-    setSelectedDate(date);
+    const isoStringDT = isoString.replace('|', '')
+    const date = new Date(isoStringDT)
+    setSelectedDate(date)
 
     // Set the url parameter dt with the new isoString (urlencoded)
-    const url = new URL(window.location.href);
-    url.searchParams.set('dt', encodeURIComponent(isoString.replace('|', '')));
+    const url = new URL(window.location.href)
+    url.searchParams.set('dt', encodeURIComponent(isoString.replace('|', '')))
     //window.history.replaceState({}, '', url.toString());
     // Update the shareable URL
-    setShareableUrl(url.toString());
-  };
+    setShareableUrl(url.toString())
+  }
 
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle className="text-2xl font-bold tracking-tight text-center">
+        <CardTitle className="text-center text-2xl font-bold tracking-tight">
           zonr.dev - Time Zone Syncer
         </CardTitle>
         <CardDescription className="text-center">
-          Enter the date, time, and time zone you want to share with others.
-          When they open the page, they&apos;ll see the time in their timezone!
+          Enter the date, time, and time zone you want to share with others. When they open the
+          page, they&apos;ll see the time in their timezone!
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -70,19 +62,15 @@ export default function DtConfigCard() {
 
         <div className="space-y-2 py-6">
           <h3 className="text-sm font-medium leading-none">Shareable Link</h3>
-          <div className="flex gap-2 h-10">
+          <div className="flex h-10 gap-2">
             {mounted ? (
               <>
-                <Input
-                  readOnly
-                  value={shareableUrl || ''}
-                  className="font-mono text-sm"
-                />
+                <Input readOnly value={shareableUrl || ''} className="font-mono text-sm" />
                 <Button
                   variant="secondary"
                   onClick={() => {
-                    navigator.clipboard.writeText(shareableUrl || '');
-                    toast.success('Copied to clipboard');
+                    navigator.clipboard.writeText(shareableUrl || '')
+                    toast.success('Copied to clipboard')
                   }}
                 >
                   Copy
@@ -90,7 +78,7 @@ export default function DtConfigCard() {
               </>
             ) : (
               <>
-                <div className="h-10 w-full bg-muted animate-pulse rounded-md" />
+                <div className="bg-muted h-10 w-full animate-pulse rounded-md" />
                 <Button variant="secondary" disabled>
                   Copy
                 </Button>
@@ -99,12 +87,12 @@ export default function DtConfigCard() {
           </div>
         </div>
 
-        <div className="rounded-lg border bg-muted/50 p-4 space-y-2">
+        <div className="bg-muted/50 space-y-2 rounded-lg border p-4">
           <h3 className="text-sm font-medium">Common Time Zones</h3>
           <div className="grid gap-2 md:grid-cols-2">
             {/* eslint-disable @next/next/no-img-element */}
             {commonTimezones.map((tz) => (
-              <div key={tz.zone} className="text-sm h-5">
+              <div key={tz.zone} className="h-5 text-sm">
                 {mounted && selectedDate ? (
                   <>
                     {tz.flag && (
@@ -119,7 +107,7 @@ export default function DtConfigCard() {
                     {tz.label}
                   </>
                 ) : (
-                  <div className="h-5 w-full bg-muted animate-pulse rounded-md" />
+                  <div className="bg-muted h-5 w-full animate-pulse rounded-md" />
                 )}
               </div>
             ))}
@@ -128,5 +116,5 @@ export default function DtConfigCard() {
         </div>
       </CardContent>
     </Card>
-  );
+  )
 }

@@ -15,7 +15,7 @@ A modern, elegant web application that helps you share and synchronize time acro
 
 - **Framework**: Next.js 15 (App Router)
 - **Language**: TypeScript
-- **UI Components**: 
+- **UI Components**:
   - Shadcn UI
   - Radix UI Primitives
   - Tailwind CSS
@@ -41,17 +41,20 @@ A modern, elegant web application that helps you share and synchronize time acro
 ### Installation
 
 1. Clone the repository:
+
 ```bash
 git clone https://github.com/sevadus/zonr.git
 cd zonr
 ```
 
 2. Install dependencies:
+
 ```bash
 pnpm install
 ```
 
 3. Start the development server:
+
 ```bash
 pnpm dev
 ```

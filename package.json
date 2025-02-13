@@ -3,14 +3,15 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
+    "fix:format": "prettier . --write --cache --ignore-unknown",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "packageManager": "pnpm@9.14.4",
   "devDependencies": {
-    "@trivago/prettier-plugin-sort-imports": "^5.2.2",
+    "@ianvs/prettier-plugin-sort-imports": "^4.4.1",
     "prettier": "^3.5.1",
-    "turbo": "^2.4.2",
-		"prettier-plugin-packagejson": "2.5.8",
-		"prettier-plugin-tailwindcss": "0.6.11"
-  }
+    "prettier-plugin-packagejson": "2.5.8",
+    "prettier-plugin-tailwindcss": "0.6.11",
+    "turbo": "^2.4.2"
+  },
+  "packageManager": "pnpm@9.14.4"
 }

@@ -1,8 +1,7 @@
-import { DateTime } from 'luxon';
+import { DateTime } from 'luxon'
+import { ImageResponse } from 'next/og'
 
-import { ImageResponse } from 'next/og';
-
-export const runtime = 'edge';
+export const runtime = 'edge'
 
 const commonTimezones = [
   { zone: 'America/New_York', label: 'New York', flag: 'us' },
@@ -13,15 +12,11 @@ const commonTimezones = [
   { zone: 'Asia/Dubai', label: 'Dubai', flag: 'ae' },
   { zone: 'Australia/Sydney', label: 'Sydney', flag: 'au' },
   { zone: 'Asia/Kolkata', label: 'New Delhi', flag: 'in' },
-];
+]
 
-export default async function GET({
-  params,
-}: {
-  params: Promise<{ dt: string | undefined }>;
-}) {
+export default async function GET({ params }: { params: Promise<{ dt: string | undefined }> }) {
   try {
-    const { dt } = await params;
+    const { dt } = await params
 
     if (!dt) {
       return new ImageResponse(
@@ -61,11 +56,11 @@ export default async function GET({
         {
           width: 1200,
           height: 630,
-        },
-      );
+        }
+      )
     }
 
-    const dtObj = DateTime.fromISO(decodeURIComponent(dt));
+    const dtObj = DateTime.fromISO(decodeURIComponent(dt))
 
     return new ImageResponse(
       (
@@ -202,10 +197,10 @@ export default async function GET({
       {
         width: 1200,
         height: 630,
-      },
-    );
+      }
+    )
   } catch (e) {
-    console.error(e);
-    return new Response('Failed to generate image', { status: 500 });
+    console.error(e)
+    return new Response('Failed to generate image', { status: 500 })
   }
 }

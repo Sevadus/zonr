@@ -1,16 +1,11 @@
-import { ThemeProvider } from 'next-themes';
+import { Toaster } from '@/components/ui/sonner'
+import { ThemeProvider } from 'next-themes'
 
-import { Toaster } from '@/components/ui/sonner';
+import './globals.css'
 
-import './globals.css';
+export const runtime = 'edge'
 
-export const runtime = 'edge';
-
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head />
@@ -26,5 +21,5 @@ export default function RootLayout({
         </ThemeProvider>
       </body>
     </html>
-  );
+  )
 }

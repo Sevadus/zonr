@@ -1,28 +1,26 @@
-'use client';
+'use client'
 
-import { useEffect, useState } from 'react';
-import { LuMoon, LuSun } from 'react-icons/lu';
-
-import { useTheme } from 'next-themes';
-
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+} from '@/components/ui/dropdown-menu'
+import { useTheme } from 'next-themes'
+import { useEffect, useState } from 'react'
+import { LuMoon, LuSun } from 'react-icons/lu'
 
 export function ThemeToggle() {
-  const [mounted, setMounted] = useState(false);
-  const { setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false)
+  const { setTheme } = useTheme()
 
   useEffect(() => {
-    setMounted(true);
-  }, []);
+    setMounted(true)
+  }, [])
 
   if (!mounted) {
-    return null;
+    return null
   }
 
   return (
@@ -35,25 +33,16 @@ export function ThemeToggle() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem
-          className="cursor-pointer"
-          onClick={() => setTheme('light')}
-        >
+        <DropdownMenuItem className="cursor-pointer" onClick={() => setTheme('light')}>
           Light
         </DropdownMenuItem>
-        <DropdownMenuItem
-          className="cursor-pointer"
-          onClick={() => setTheme('dark')}
-        >
+        <DropdownMenuItem className="cursor-pointer" onClick={() => setTheme('dark')}>
           Dark
         </DropdownMenuItem>
-        <DropdownMenuItem
-          className="cursor-pointer"
-          onClick={() => setTheme('system')}
-        >
+        <DropdownMenuItem className="cursor-pointer" onClick={() => setTheme('system')}>
           System
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
-  );
+  )
 }
