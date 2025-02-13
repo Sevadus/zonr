@@ -13,7 +13,7 @@ export default function DtConvertCard({ dt }: { dt: string }) {
   if (!isVisible) return null
 
   return (
-    <div className="bg-muted/50 relative space-y-2 rounded-lg border p-8 text-center">
+    <div className="bg-card relative space-y-2 rounded-lg border p-8 text-center">
       <Button
         variant="ghost"
         size="icon"
@@ -27,9 +27,7 @@ export default function DtConvertCard({ dt }: { dt: string }) {
       >
         <LuX className="size-4" />
       </Button>
-      <h3 className="text-xl">
-        {dtObj_sender.toLocaleString(DateTime.DATETIME_FULL_WITH_SECONDS)}
-      </h3>
+      <h3 className="text-xl">{dtObj_sender.toLocaleString(DateTime.DATETIME_FULL_WITH_SECONDS)}</h3>
       <p className="text-muted-foreground text-lg">in your local timezone is</p>
       <h2 className="text-4xl">{dtObj.toLocaleString(DateTime.DATETIME_FULL_WITH_SECONDS)}</h2>
     </div>

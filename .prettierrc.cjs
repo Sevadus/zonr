@@ -24,12 +24,12 @@ const typeImports = ['<TYPES>'].concat(
 
 /** @type {import("prettier").Config} */
 const config = {
-  trailingComma: 'es5',
+  trailingComma: 'all',
   tabWidth: 2,
   useTabs: false,
   semi: false,
   singleQuote: true,
-  printWidth: 100,
+  printWidth: 120,
   plugins: [
     '@ianvs/prettier-plugin-sort-imports',
     'prettier-plugin-packagejson',
