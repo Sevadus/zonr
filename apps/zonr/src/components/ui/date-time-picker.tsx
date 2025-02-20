@@ -15,9 +15,7 @@ const timezoneGroups = [
   {
     region: 'Popular',
     zones: getTimeZones().filter((tz) =>
-      ['America/New_York', 'America/Los_Angeles', 'Europe/London', 'Asia/Tokyo', 'UTC'].includes(
-        tz.name
-      )
+      ['America/New_York', 'America/Los_Angeles', 'Europe/London', 'Asia/Tokyo', 'UTC'].includes(tz.name),
     ),
   },
   {
@@ -26,9 +24,7 @@ const timezoneGroups = [
       (tz) =>
         tz.name.startsWith('America/') &&
         (tz.mainCities.length > 0 ||
-          ['America/New_York', 'America/Chicago', 'America/Denver', 'America/Los_Angeles'].includes(
-            tz.name
-          ))
+          ['America/New_York', 'America/Chicago', 'America/Denver', 'America/Los_Angeles'].includes(tz.name)),
     ),
   },
   {
@@ -36,8 +32,7 @@ const timezoneGroups = [
     zones: getTimeZones().filter(
       (tz) =>
         tz.name.startsWith('Europe/') &&
-        (tz.mainCities.length > 0 ||
-          ['Europe/London', 'Europe/Paris', 'Europe/Berlin'].includes(tz.name))
+        (tz.mainCities.length > 0 || ['Europe/London', 'Europe/Paris', 'Europe/Berlin'].includes(tz.name)),
     ),
   },
   {
@@ -46,7 +41,7 @@ const timezoneGroups = [
       (tz) =>
         tz.name.startsWith('Asia/') &&
         (tz.mainCities.length > 0 ||
-          ['Asia/Dubai', 'Asia/Singapore', 'Asia/Tokyo', 'Asia/Hong_Kong'].includes(tz.name))
+          ['Asia/Dubai', 'Asia/Singapore', 'Asia/Tokyo', 'Asia/Hong_Kong'].includes(tz.name)),
     ),
   },
   {
@@ -54,7 +49,7 @@ const timezoneGroups = [
     zones: getTimeZones().filter(
       (tz) =>
         (tz.name.startsWith('Pacific/') || tz.name.startsWith('Australia/')) &&
-        (tz.mainCities.length > 0 || ['Australia/Sydney', 'Pacific/Auckland'].includes(tz.name))
+        (tz.mainCities.length > 0 || ['Australia/Sydney', 'Pacific/Auckland'].includes(tz.name)),
     ),
   },
 ]
@@ -65,7 +60,6 @@ interface TimeState {
   day: string
   hour: string
   minute: string
-  second: string
   ampm: 'AM' | 'PM'
   timezone: string
 }
@@ -87,7 +81,6 @@ export function DateTimePicker({ setDate }: DateTimePickerProps) {
       day: now.getDate().toString().padStart(2, '0'),
       hour: (now.getHours() % 12 || 12).toString(),
       minute: now.getMinutes().toString().padStart(2, '0'),
-      second: now.getSeconds().toString().padStart(2, '0'),
       ampm: now.getHours() >= 12 ? 'PM' : 'AM',
       timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
     }
@@ -97,8 +90,7 @@ export function DateTimePicker({ setDate }: DateTimePickerProps) {
     (newState: TimeState) => {
       if (!setDate) return
 
-      const hour24 =
-        newState.ampm === 'PM' ? (parseInt(newState.hour) % 12) + 12 : parseInt(newState.hour) % 12
+      const hour24 = newState.ampm === 'PM' ? (parseInt(newState.hour) % 12) + 12 : parseInt(newState.hour) % 12
 
       const dt = DateTime.fromObject(
         {
@@ -107,15 +99,15 @@ export function DateTimePicker({ setDate }: DateTimePickerProps) {
           day: parseInt(newState.day),
           hour: hour24,
           minute: parseInt(newState.minute),
-          second: parseInt(newState.second),
+          second: 0,
         },
-        { zone: newState.timezone }
+        { zone: newState.timezone },
       )
 
-      const isoString = `${newState.year}-${newState.month}-${newState.day}T${hour24.toString().padStart(2, '0')}:${newState.minute}:${newState.second}|${dt.toFormat('ZZ')}`
+      const isoString = `${newState.year}-${newState.month}-${newState.day}T${hour24.toString().padStart(2, '0')}:${newState.minute}:00|${dt.toFormat('ZZ')}`
       setDate(isoString)
     },
-    [setDate]
+    [setDate],
   )
 
   // Update mounted state and emit initial date
@@ -129,7 +121,6 @@ export function DateTimePicker({ setDate }: DateTimePickerProps) {
 
   const selectedHourRef = React.useRef<HTMLButtonElement>(null)
   const selectedMinuteRef = React.useRef<HTMLButtonElement>(null)
-  const selectedSecondRef = React.useRef<HTMLButtonElement>(null)
   const selectedAMPMRef = React.useRef<HTMLButtonElement>(null)
 
   React.useEffect(() => {
@@ -137,7 +128,6 @@ export function DateTimePicker({ setDate }: DateTimePickerProps) {
       setTimeout(() => {
         selectedHourRef.current?.scrollIntoView({ block: 'center' })
         selectedMinuteRef.current?.scrollIntoView({ block: 'center' })
-        selectedSecondRef.current?.scrollIntoView({ block: 'center' })
         selectedAMPMRef.current?.scrollIntoView({ block: 'center' })
       }, 0)
     }
@@ -157,18 +147,15 @@ export function DateTimePicker({ setDate }: DateTimePickerProps) {
     emitDateChange(newState)
   }
 
-  const handleTimeChange = (
-    type: keyof Omit<TimeState, 'year' | 'month' | 'day'>,
-    value: string
-  ) => {
+  const handleTimeChange = (type: keyof Omit<TimeState, 'year' | 'month' | 'day'>, value: string) => {
     const newState = { ...timeState, [type]: value }
     setTimeState(newState)
     emitDateChange(newState)
   }
 
   const formatDisplayDate = () => {
-    const { month, day, year, hour, minute, second, ampm, timezone } = timeState
-    return `${month}/${day}/${year} ${hour}:${minute}:${second} ${ampm} (${timezone})`
+    const { month, day, year, hour, minute, ampm, timezone } = timeState
+    return `${month}/${day}/${year} ${hour}:${minute} ${ampm} (${timezone})`
   }
 
   if (!mounted) {
@@ -183,10 +170,7 @@ export function DateTimePicker({ setDate }: DateTimePickerProps) {
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          className={cn('h-12 w-full justify-start text-left text-xl font-normal')}
-        >
+        <Button variant="outline" className={cn('h-12 w-full justify-start text-left text-xl font-normal')}>
           <LuCalendarDays className="mr-2 !size-6" />
           <span>{formatDisplayDate()}</span>
         </Button>
@@ -221,42 +205,13 @@ export function DateTimePicker({ setDate }: DateTimePickerProps) {
               {Array.from({ length: 60 }, (_, i) => i).map((minute) => (
                 <Button
                   key={minute}
-                  ref={
-                    timeState.minute === minute.toString().padStart(2, '0')
-                      ? selectedMinuteRef
-                      : null
-                  }
+                  ref={timeState.minute === minute.toString().padStart(2, '0') ? selectedMinuteRef : null}
                   size="icon"
-                  variant={
-                    timeState.minute === minute.toString().padStart(2, '0') ? 'default' : 'ghost'
-                  }
+                  variant={timeState.minute === minute.toString().padStart(2, '0') ? 'default' : 'ghost'}
                   className="w-full"
                   onClick={() => handleTimeChange('minute', minute.toString().padStart(2, '0'))}
                 >
                   {minute.toString().padStart(2, '0')}
-                </Button>
-              ))}
-            </div>
-            <ScrollBar />
-          </ScrollArea>
-          <ScrollArea className="h-[300px] w-16">
-            <div className="flex flex-col p-2">
-              {Array.from({ length: 60 }, (_, i) => i).map((second) => (
-                <Button
-                  key={second}
-                  ref={
-                    timeState.second === second.toString().padStart(2, '0')
-                      ? selectedSecondRef
-                      : null
-                  }
-                  size="icon"
-                  variant={
-                    timeState.second === second.toString().padStart(2, '0') ? 'default' : 'ghost'
-                  }
-                  className="w-full"
-                  onClick={() => handleTimeChange('second', second.toString().padStart(2, '0'))}
-                >
-                  {second.toString().padStart(2, '0')}
                 </Button>
               ))}
             </div>
@@ -282,9 +237,7 @@ export function DateTimePicker({ setDate }: DateTimePickerProps) {
             <div className="flex flex-col p-2">
               {timezoneGroups.map((group) => (
                 <div key={group.region} className="mb-4">
-                  <div className="text-muted-foreground mb-1 px-2 text-sm font-medium">
-                    {group.region}
-                  </div>
+                  <div className="text-muted-foreground mb-1 px-2 text-sm font-medium">{group.region}</div>
                   {group.zones.map((zone) => (
                     <Button
                       key={zone.name}
@@ -294,9 +247,7 @@ export function DateTimePicker({ setDate }: DateTimePickerProps) {
                     >
                       <div className="flex w-full flex-col">
                         <span className="font-medium">
-                          {zone.mainCities.length > 0
-                            ? zone.mainCities[0]
-                            : zone.name.split('/').pop()}
+                          {zone.mainCities.length > 0 ? zone.mainCities[0] : zone.name.split('/').pop()}
                         </span>
                         <span className="text-muted-foreground pl-2 text-xs">
                           {(() => {

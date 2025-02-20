@@ -27,9 +27,9 @@ export default function DtConvertCard({ dt }: { dt: string }) {
       >
         <LuX className="size-4" />
       </Button>
-      <h3 className="text-xl">{dtObj_sender.toLocaleString(DateTime.DATETIME_FULL_WITH_SECONDS)}</h3>
+      <h3 className="text-xl">{dtObj_sender.toLocaleString(DateTime.DATETIME_FULL)}</h3>
       <p className="text-muted-foreground text-lg">in your local timezone is</p>
-      <h2 className="text-4xl">{dtObj.toLocaleString(DateTime.DATETIME_FULL_WITH_SECONDS)}</h2>
+      <h2 className="text-4xl">{dtObj.toLocaleString(DateTime.DATETIME_FULL)}</h2>
     </div>
   )
 }
