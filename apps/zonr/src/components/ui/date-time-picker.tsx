@@ -178,7 +178,11 @@ export function DateTimePicker({ setDate }: DateTimePickerProps) {
       <PopoverContent className="flex w-auto p-0">
         <Calendar
           mode="single"
-          selected={new Date(`${timeState.year}-${timeState.month}-${timeState.day}`)}
+          selected={DateTime.fromObject({
+            year: parseInt(timeState.year),
+            month: parseInt(timeState.month),
+            day: parseInt(timeState.day),
+          }).toJSDate()}
           onSelect={handleCalendarSelect}
           initialFocus
         />
