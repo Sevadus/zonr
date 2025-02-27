@@ -15,57 +15,71 @@ const commonTimezones = [
   { zone: 'Asia/Kolkata', label: 'New Delhi', flag: 'in' },
 ]
 
+// Default OpenGraph image for the home page
+function getDefaultImage() {
+  return new ImageResponse(
+    (
+      <div
+        style={{
+          background: '#ffffff',
+          width: '100%',
+          height: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: '10px',
+        }}
+      >
+        <div
+          style={{
+            fontSize: 72,
+            fontWeight: 'bold',
+            color: '#3b82f6',
+          }}
+        >
+          zonr.dev
+        </div>
+        <div
+          style={{
+            fontSize: 36,
+            color: '#4b5563',
+            marginTop: '20px',
+          }}
+        >
+          Share your time across timezones
+        </div>
+      </div>
+    ),
+    {
+      width: 1200,
+      height: 630,
+    },
+  )
+}
+
+// Use a route handler to access query parameters
 export default async function GET({ params }: { params: Promise<{ dt: string | undefined }> }) {
   try {
-    let { dt } = await params
+    const { dt } = await Promise.resolve(params)
+    console.log('OpenGraph image dt param:', dt)
 
     if (!dt) {
-      return new ImageResponse(
-        (
-          <div
-            style={{
-              background: '#ffffff',
-              width: '100%',
-              height: '100%',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: '10px',
-            }}
-          >
-            <div
-              style={{
-                fontSize: 72,
-                fontWeight: 'bold',
-                color: '#3b82f6',
-              }}
-            >
-              zonr.dev
-            </div>
-            <div
-              style={{
-                fontSize: 36,
-                color: '#4b5563',
-                marginTop: '20px',
-              }}
-            >
-              Share your time across timezones
-            </div>
-          </div>
-        ),
-        {
-          width: 1200,
-          height: 630,
-        },
-      )
+      return getDefaultImage()
     }
 
-    if (dt.length < 19) {
-      dt = expandUrl(dt)
+    let dtValue = dt
+    if (dtValue.length < 19) {
+      dtValue = expandUrl(dtValue)
     }
 
-    const dtObj = DateTime.fromISO(decodeURIComponent(dt))
+    const dtObj = DateTime.fromISO(decodeURIComponent(dtValue))
+
+    // Check if DateTime parsing was successful
+    if (!dtObj.isValid) {
+      console.error('Invalid DateTime:', dtObj.invalidReason)
+      return getDefaultImage()
+    }
 
     return new ImageResponse(
       (
@@ -204,6 +218,6 @@ export default async function GET({ params }: { params: Promise<{ dt: string | u
     )
   } catch (e) {
     console.error(e)
-    return new Response('Failed to generate image', { status: 500 })
+    return getDefaultImage()
   }
 }

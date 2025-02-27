@@ -18,14 +18,16 @@ export default function DtConfigCard() {
   }, [])
 
   const handleDateChange = (isoString: string) => {
-    // Set the url parameter dt with the new isoString (urlencoded)
-    const url = new URL(window.location.href)
+    // Create the URL with the new route format
+    const baseUrl = window.location.origin
     const dt = isoString.replace('|', '')
-    url.searchParams.set('dt', dt)
-    // Update the shareable URL
-    setShareableUrl(url.toString())
-    url.searchParams.set('dt', shortenUrl(dt))
-    setShareableUrlShort(url.toString())
+
+    // Update the shareable URL with full ISO string
+    setShareableUrl(`${baseUrl}/${encodeURIComponent(dt)}`)
+
+    // Update the shareable URL with shortened format
+    const shortDt = shortenUrl(dt)
+    setShareableUrlShort(`${baseUrl}/${shortDt}`)
   }
 
   return (
