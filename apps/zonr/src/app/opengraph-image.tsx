@@ -1,3 +1,4 @@
+import { expandUrl } from '@/lib/utils'
 import { DateTime } from 'luxon'
 import { ImageResponse } from 'next/og'
 
@@ -16,7 +17,7 @@ const commonTimezones = [
 
 export default async function GET({ params }: { params: Promise<{ dt: string | undefined }> }) {
   try {
-    const { dt } = await params
+    let { dt } = await params
 
     if (!dt) {
       return new ImageResponse(
@@ -56,8 +57,12 @@ export default async function GET({ params }: { params: Promise<{ dt: string | u
         {
           width: 1200,
           height: 630,
-        }
+        },
       )
+    }
+
+    if (dt.length < 19) {
+      dt = expandUrl(dt)
     }
 
     const dtObj = DateTime.fromISO(decodeURIComponent(dt))
@@ -119,7 +124,6 @@ export default async function GET({ params }: { params: Promise<{ dt: string | u
                         marginBottom: '8px',
                       }}
                     >
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={`https://flagcdn.com/24x18/${tz.flag}.png`}
                         alt={tz.label}
@@ -163,7 +167,6 @@ export default async function GET({ params }: { params: Promise<{ dt: string | u
                         marginBottom: '8px',
                       }}
                     >
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={`https://flagcdn.com/24x18/${tz.flag}.png`}
                         alt={tz.label}
@@ -197,7 +200,7 @@ export default async function GET({ params }: { params: Promise<{ dt: string | u
       {
         width: 1200,
         height: 630,
-      }
+      },
     )
   } catch (e) {
     console.error(e)
