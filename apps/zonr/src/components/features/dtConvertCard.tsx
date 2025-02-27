@@ -1,12 +1,16 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
+import { expandUrl } from '@/lib/utils'
 import { DateTime } from 'luxon'
 import { useState } from 'react'
 import { LuX } from 'react-icons/lu'
 
 export default function DtConvertCard({ dt }: { dt: string }) {
   const [isVisible, setIsVisible] = useState(true)
+  if (dt.length < 19) {
+    dt = expandUrl(dt)
+  }
   const dtObj = DateTime.fromISO(dt)
   const dtObj_sender = DateTime.fromISO(dt, { setZone: true })
 

@@ -4,11 +4,13 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { DateTimePicker } from '@/components/ui/date-time-picker'
 import { Input } from '@/components/ui/input'
+import { shortenUrl } from '@/lib/utils'
 import React, { useState } from 'react'
 import { toast } from 'sonner'
 
 export default function DtConfigCard() {
   const [shareableUrl, setShareableUrl] = useState('')
+  const [shareableUrlShort, setShareableUrlShort] = useState('')
   const [mounted, setMounted] = useState(false)
 
   React.useEffect(() => {
@@ -18,10 +20,12 @@ export default function DtConfigCard() {
   const handleDateChange = (isoString: string) => {
     // Set the url parameter dt with the new isoString (urlencoded)
     const url = new URL(window.location.href)
-    url.searchParams.set('dt', encodeURIComponent(isoString.replace('|', '')))
-    //window.history.replaceState({}, '', url.toString());
+    const dt = isoString.replace('|', '')
+    url.searchParams.set('dt', dt)
     // Update the shareable URL
     setShareableUrl(url.toString())
+    url.searchParams.set('dt', shortenUrl(dt))
+    setShareableUrlShort(url.toString())
   }
 
   return (
@@ -46,6 +50,31 @@ export default function DtConfigCard() {
                   variant="secondary"
                   onClick={() => {
                     navigator.clipboard.writeText(shareableUrl || '')
+                    toast.success('Copied to clipboard')
+                  }}
+                  className="hover:bg-secondary-hover"
+                >
+                  Copy
+                </Button>
+              </>
+            ) : (
+              <>
+                <div className="bg-muted h-10 w-full animate-pulse rounded-md" />
+                <Button variant="secondary" disabled>
+                  Copy
+                </Button>
+              </>
+            )}
+          </div>
+          <h3 className="text-sm font-medium leading-none">Short Shareable Link</h3>
+          <div className="flex h-10 gap-2">
+            {mounted ? (
+              <>
+                <Input readOnly value={shareableUrlShort || ''} className="bg-background font-mono text-sm" />
+                <Button
+                  variant="secondary"
+                  onClick={() => {
+                    navigator.clipboard.writeText(shareableUrlShort || '')
                     toast.success('Copied to clipboard')
                   }}
                   className="hover:bg-secondary-hover"
