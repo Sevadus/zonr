@@ -3,13 +3,11 @@
 import { Button } from '@/components/ui/button'
 import { expandUrl } from '@/lib/utils'
 import { DateTime } from 'luxon'
-import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { LuX } from 'react-icons/lu'
 
 export default function DtConvertCard({ dt }: { dt: string }) {
   const [isVisible, setIsVisible] = useState(true)
-  const router = useRouter()
 
   if (dt.length < 19) {
     dt = expandUrl(dt)
@@ -26,8 +24,6 @@ export default function DtConvertCard({ dt }: { dt: string }) {
         size="icon"
         className="absolute right-2 top-2"
         onClick={() => {
-          // Navigate to the home page when closing
-          router.push('/')
           setIsVisible(false)
         }}
       >
