@@ -8,6 +8,8 @@ import { shortenUrl } from '@/lib/utils'
 import React, { useState } from 'react'
 import { toast } from 'sonner'
 
+import DtPreviewOpenGraph from './dtPreviewOpenGraph'
+
 export default function DtConfigCard() {
   const [shareableUrl, setShareableUrl] = useState('')
   const [shareableUrlShort, setShareableUrlShort] = useState('')
@@ -94,6 +96,7 @@ export default function DtConfigCard() {
             )}
           </div>
         </div>
+        {mounted && <DtPreviewOpenGraph dt={shareableUrl.split('/').pop() || ''} />}
       </CardContent>
     </Card>
   )
