@@ -4,14 +4,15 @@
   "description": "",
   "scripts": {
     "fix:format": "prettier . --write --cache --ignore-unknown",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "turbo dev"
   },
   "devDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "^4.4.1",
-    "prettier": "^3.5.1",
+    "prettier": "^3.5.2",
     "prettier-plugin-packagejson": "2.5.8",
     "prettier-plugin-tailwindcss": "0.6.11",
-    "turbo": "^2.4.2"
+    "turbo": "^2.4.4"
   },
   "packageManager": "pnpm@9.14.4"
 }
