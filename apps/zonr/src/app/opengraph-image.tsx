@@ -59,21 +59,21 @@ function getDefaultImage() {
 }
 
 // Use a route handler to access query parameters
-export default async function GET({ params }: { params: Promise<{ dt: string | undefined }> }) {
+export default async function GET({ params }: { params: Promise<{ dt: string }> | { dt: string } }) {
   try {
-    const { dt } = await Promise.resolve(params)
+    const resolvedParams = await Promise.resolve(params)
+    let dt = decodeURIComponent(resolvedParams.dt)
     console.log('OpenGraph image dt param:', dt)
 
     if (!dt) {
       return getDefaultImage()
     }
 
-    let dtValue = dt
-    if (dtValue.length < 19) {
-      dtValue = expandUrl(dtValue)
+    if (dt.length < 19) {
+      dt = expandUrl(dt)
     }
 
-    const dtObj = DateTime.fromISO(decodeURIComponent(dtValue))
+    const dtObj = DateTime.fromISO(decodeURIComponent(dt))
 
     // Check if DateTime parsing was successful
     if (!dtObj.isValid) {

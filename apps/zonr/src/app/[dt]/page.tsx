@@ -50,8 +50,6 @@ function isValidDateTime(dt: string) {
 export default async function DtPage({ params }: { params: Promise<{ dt: string }> | { dt: string } }) {
   const resolvedParams = await Promise.resolve(params)
   const dt = decodeURIComponent(resolvedParams.dt)
-  console.log(dt)
-  console.log(isValidDateTime(dt))
 
   return (
     <div className="bg-background flex min-h-screen flex-col items-center justify-center p-4">
