@@ -21,7 +21,7 @@ function getDefaultImage() {
     (
       <div
         style={{
-          background: '#ffffff',
+          background: '#D3D3D3',
           width: '100%',
           height: '100%',
           display: 'flex',
@@ -74,6 +74,7 @@ export default async function GET({ params }: { params: Promise<{ dt: string }> 
     }
 
     const dtObj = DateTime.fromISO(decodeURIComponent(dt))
+    const dtObj_sender = DateTime.fromISO(decodeURIComponent(dt), { setZone: true })
 
     // Check if DateTime parsing was successful
     if (!dtObj.isValid) {
@@ -85,7 +86,7 @@ export default async function GET({ params }: { params: Promise<{ dt: string }> 
       (
         <div
           style={{
-            background: '#ffffff',
+            background: '#e3e3e3',
             width: '100%',
             height: '100%',
             display: 'flex',
@@ -124,9 +125,9 @@ export default async function GET({ params }: { params: Promise<{ dt: string }> 
                       display: 'flex',
                       flexDirection: 'column',
                       fontSize: 32,
-                      color: '#4b5563',
+                      color: '#080808',
                       padding: '16px',
-                      background: '#f3f4f6',
+                      background: '#CCCCCC',
                     }}
                   >
                     <div
@@ -134,7 +135,7 @@ export default async function GET({ params }: { params: Promise<{ dt: string }> 
                         display: 'flex',
                         alignItems: 'center',
                         fontWeight: 'bold',
-                        color: '#1f2937',
+                        color: '#080808',
                         marginBottom: '8px',
                       }}
                     >
@@ -167,9 +168,9 @@ export default async function GET({ params }: { params: Promise<{ dt: string }> 
                       display: 'flex',
                       flexDirection: 'column',
                       fontSize: 32,
-                      color: '#4b5563',
+                      color: '#080808',
                       padding: '16px',
-                      background: '#f3f4f6',
+                      background: '#CCCCCC',
                     }}
                   >
                     <div
@@ -177,7 +178,7 @@ export default async function GET({ params }: { params: Promise<{ dt: string }> 
                         display: 'flex',
                         alignItems: 'center',
                         fontWeight: 'bold',
-                        color: '#1f2937',
+                        color: '#080808',
                         marginBottom: '8px',
                       }}
                     >
@@ -199,15 +200,29 @@ export default async function GET({ params }: { params: Promise<{ dt: string }> 
           </div>
           <div
             style={{
+              display: 'flex',
               position: 'absolute',
               bottom: '10px',
               right: '20px',
               fontSize: 28,
               fontWeight: 'bold',
-              color: '#3b82f6',
+              color: '#4f97d7',
             }}
           >
             zonr.dev
+          </div>
+          <div
+            style={{
+              display: 'flex',
+              position: 'absolute',
+              bottom: '10px',
+              left: '20px',
+              fontSize: 28,
+              fontWeight: 'bold',
+              color: '#080808',
+            }}
+          >
+            Original Date: {dtObj_sender.toLocaleString(DateTime.DATETIME_FULL)}
           </div>
         </div>
       ),
