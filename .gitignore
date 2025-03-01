@@ -23,6 +23,8 @@ node_modules
 # production
 /build
 /.wrangler
+.vercel
+.wrangler
 
 # misc
 .DS_Store
