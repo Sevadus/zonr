@@ -2,6 +2,16 @@
   "$schema": "https://turbo.build/schema.json",
   "ui": "stream",
   "tasks": {
+    "build:worker": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**", ".open-next/**"],
+      "outputLogs": "new-only"
+    },
+    "deploy:worker": {
+      "dependsOn": ["build:worker"],
+      "outputs": ["dist/**", ".open-next/**"],
+      "outputLogs": "new-only"
+    },
     "build": {
       "dependsOn": ["^build"],
       "outputs": ["dist/**", ".next/**"],

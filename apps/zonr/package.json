@@ -6,7 +6,7 @@
     "build": "next build",
     "build:worker": "opennextjs-cloudflare",
     "deploy": "pnpm run build:worker && wrangler pages deploy",
-    "deploy:worker": "pnpm run build:worker && wrangler deploy",
+    "deploy:worker": "wrangler deploy",
     "dev": "next dev --turbopack",
     "dev:worker": "wrangler dev --port 8771",
     "lint": "next lint",
