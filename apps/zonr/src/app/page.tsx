@@ -3,8 +3,6 @@ import { ThemeToggle } from '@/components/theme-toggle'
 import { Metadata } from 'next'
 import { DiGithubBadge } from 'react-icons/di'
 
-export const runtime = 'edge'
-
 export async function generateMetadata(): Promise<Metadata> {
   const baseUrl = new URL(process.env.NEXT_PUBLIC_BASE_URL || 'https://zonr.dev')
 

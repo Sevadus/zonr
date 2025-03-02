@@ -4,11 +4,13 @@
   "private": true,
   "scripts": {
     "build": "next build",
-    "deploy": "pnpm run pages:build && wrangler pages deploy",
+    "build:worker": "opennextjs-cloudflare",
+    "deploy": "pnpm run build:worker && wrangler pages deploy",
+    "deploy:worker": "pnpm run build:worker && wrangler deploy",
     "dev": "next dev --turbopack",
+    "dev:worker": "wrangler dev --port 8771",
     "lint": "next lint",
-    "pages:build": "pnpx @cloudflare/next-on-pages",
-    "preview": "pnpm run pages:build && wrangler pages dev",
+    "preview:worker": "pnpm run build:worker && pnpm run dev:worker",
     "start": "next start",
     "typecheck": "tsc --noEmit"
   },
@@ -42,8 +44,8 @@
     "zod": "^3.24.2"
   },
   "devDependencies": {
-    "@cloudflare/next-on-pages": "^1.13.8",
     "@eslint/eslintrc": "^3.3.0",
+    "@opennextjs/cloudflare": "^0.5.7",
     "@types/luxon": "^3.4.2",
     "@types/node": "^22.13.5",
     "@types/react": "^19.0.10",

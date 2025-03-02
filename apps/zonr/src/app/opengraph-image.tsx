@@ -2,8 +2,6 @@ import { expandUrl } from '@/lib/utils'
 import { DateTime } from 'luxon'
 import { ImageResponse } from 'next/og'
 
-export const runtime = 'edge'
-
 const commonTimezones = [
   { zone: 'America/New_York', label: 'New York', flag: 'us' },
   { zone: 'America/Los_Angeles', label: 'Los Angeles', flag: 'us' },

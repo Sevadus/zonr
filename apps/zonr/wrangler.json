@@ -1,6 +1,15 @@
 {
+  "$schema": "node_modules/wrangler/config-schema.json",
   "name": "zonr",
-  "compatibility_date": "2025-02-05",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2025-03-02",
   "compatibility_flags": ["nodejs_compat"],
-  "pages_build_output_dir": ".vercel/output/static"
+  "minify": true,
+  "assets": {
+    "binding": "ASSETS",
+    "directory": ".open-next/assets"
+  },
+  "observability": {
+    "enabled": true
+  }
 }
