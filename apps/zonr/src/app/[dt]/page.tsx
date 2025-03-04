@@ -1,6 +1,7 @@
 import DtConfigCard from '@/components/features/dtConfigCard'
 import DtConvertCard from '@/components/features/dtConvertCard'
 import { ThemeToggle } from '@/components/theme-toggle'
+import { expandUrl } from '@/lib/utils'
 import { DateTime } from 'luxon'
 import { Metadata } from 'next'
 import { DiGithubBadge } from 'react-icons/di'
@@ -13,9 +14,13 @@ export async function generateMetadata({
   params: Promise<{ dt: string }> | { dt: string }
 }): Promise<Metadata> {
   const resolvedParams = await Promise.resolve(params)
-  const dt = decodeURIComponent(resolvedParams.dt)
+  let dt = decodeURIComponent(resolvedParams.dt)
 
   const baseUrl = new URL(process.env.NEXT_PUBLIC_BASE_URL || 'https://zonr.dev')
+
+  if (dt.length < 19) {
+    dt = expandUrl(dt)
+  }
 
   const description =
     dt && isValidDateTime(dt)

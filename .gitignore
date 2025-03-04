@@ -18,11 +18,11 @@ node_modules
 # next.js
 .next
 /out/
-/.open-next
+.open-next
 
 # production
 /build
-/.wrangler
+.wrangler
 
 # misc
 .DS_Store

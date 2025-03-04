@@ -63,7 +63,6 @@ export default async function GET({ params }: { params: Promise<{ dt: string }> 
   try {
     const resolvedParams = await Promise.resolve(params)
     let dt = decodeURIComponent(resolvedParams.dt)
-    console.log('OpenGraph image dt param:', dt)
 
     if (!dt || dt === 'undefined') {
       return getDefaultImage()
